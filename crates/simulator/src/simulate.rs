@@ -236,6 +236,9 @@ pub async fn run_migration_simulation(
                     res = tokio::time::timeout(query_timeout, client.batch_execute(sql)) => {
                         if let Ok(Err(err)) = res {
                             debug!(worker = worker_idx, error = %err, "worker query returned error during simulation");
+                            if err.is_closed() || client.is_closed() {
+                                break;
+                            }
                         }
                     }
                 }
