@@ -1,0 +1,15 @@
+[package]
+name = "migrationx-cli"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+migrationx-contracts = { path = "../contracts" }
+migrationx-static-analyzer = { path = "../static-analyzer" }
+migrationx-simulator = { path = "../simulator" }
+clap = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tokio = { workspace = true }

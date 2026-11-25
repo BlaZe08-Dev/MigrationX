@@ -1,0 +1,47 @@
+{
+  "schema_version": "0.1.0",
+  "migration_sql": "ALTER TABLE public.users ALTER COLUMN status TYPE VARCHAR(64);\nCREATE INDEX idx_orders_created_at ON public.orders (created_at);\nDO $$ BEGIN PERFORM pg_advisory_lock(42); END $$;",
+  "findings": [
+    {
+      "code": "PG002-TABLE-REWRITE",
+      "summary": "Changing column type on public.users triggers a full table rewrite under ACCESS EXCLUSIVE lock.",
+      "severity": "CRITICAL",
+      "offending_sql": "ALTER TABLE public.users ALTER COLUMN status TYPE VARCHAR(64);",
+      "status": "STATICALLY_DETECTED",
+      "remediation": "Use an Expand-Contract pattern: add a new column, dual-write, backfill in batches, and swap."
+    },
+    {
+      "code": "PG003-MISSING-CONCURRENTLY",
+      "summary": "CREATE INDEX without CONCURRENTLY acquires a SHARE lock blocking concurrent writes.",
+      "severity": "HIGH",
+      "offending_sql": "CREATE INDEX idx_orders_created_at ON public.orders (created_at);",
+      "status": "STATICALLY_DETECTED",
+      "remediation": "Use CREATE INDEX CONCURRENTLY outside of a transaction block."
+    },
+    {
+      "code": "PG099-DYNAMIC-DO-BLOCK",
+      "summary": "Dynamic DO $$ block cannot be fully verified by static AST inspection alone.",
+      "severity": "MEDIUM",
+      "offending_sql": "DO $$ BEGIN PERFORM pg_advisory_lock(42); END $$;",
+      "status": "UNSUPPORTED_SCENARIO",
+      "remediation": "Replace dynamic PL/pgSQL blocks with explicit top-level SQL statements where possible."
+    },
+    {
+      "code": "PG010-ADVISORY-LOCK-UNOBSERVED",
+      "summary": "Advisory lock usage could not be statically bounded for contention impact.",
+      "severity": "LOW",
+      "offending_sql": "DO $$ BEGIN PERFORM pg_advisory_lock(42); END $$;",
+      "status": "COULD_NOT_VERIFY",
+      "remediation": "Verify advisory lock key contention in a live simulation."
+    },
+    {
+      "code": "PG004-SAFE-NULLABLE-COLUMN",
+      "summary": "Adding nullable column without volatile default does not rewrite the table.",
+      "severity": "LOW",
+      "offending_sql": "ALTER TABLE public.audit_events ADD COLUMN trace_id UUID;",
+      "status": "PASSED",
+      "remediation": null
+    }
+  ],
+  "overall_status": "STATICALLY_DETECTED"
+}

@@ -1,0 +1,8 @@
+/home/neelesh/MigrationBlast/target/debug/build/bollard-stubs/6dcf2fe27686c703/out/bollard_stubs-6dcf2fe27686c703.d: /home/neelesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bollard-stubs-1.53.1-rc.29.3.1/src/lib.rs /home/neelesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bollard-stubs-1.53.1-rc.29.3.1/src/query_parameters.rs /home/neelesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bollard-stubs-1.53.1-rc.29.3.1/src/models.rs /home/neelesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bollard-stubs-1.53.1-rc.29.3.1/src/serde_ext.rs
+
+/home/neelesh/MigrationBlast/target/debug/build/bollard-stubs/6dcf2fe27686c703/out/libbollard_stubs-6dcf2fe27686c703.rmeta: /home/neelesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bollard-stubs-1.53.1-rc.29.3.1/src/lib.rs /home/neelesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bollard-stubs-1.53.1-rc.29.3.1/src/query_parameters.rs /home/neelesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bollard-stubs-1.53.1-rc.29.3.1/src/models.rs /home/neelesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bollard-stubs-1.53.1-rc.29.3.1/src/serde_ext.rs
+
+/home/neelesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bollard-stubs-1.53.1-rc.29.3.1/src/lib.rs:
+/home/neelesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bollard-stubs-1.53.1-rc.29.3.1/src/query_parameters.rs:
+/home/neelesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bollard-stubs-1.53.1-rc.29.3.1/src/models.rs:
+/home/neelesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bollard-stubs-1.53.1-rc.29.3.1/src/serde_ext.rs:

@@ -1,0 +1,29 @@
+{
+  "schema_version": "0.1.0",
+  "captured_at": "2026-11-25T14:00:00Z",
+  "pg_version": "16.4",
+  "database_name": "app_production",
+  "tables": {
+    "public.users": {
+      "qualified_name": "public.users",
+      "estimated_row_count": 50000000,
+      "total_size_bytes": 12884901888,
+      "has_triggers": true,
+      "has_foreign_key_refs": true
+    },
+    "public.orders": {
+      "qualified_name": "public.orders",
+      "estimated_row_count": 12500000,
+      "total_size_bytes": 4294967296,
+      "has_triggers": false,
+      "has_foreign_key_refs": true
+    },
+    "public.audit_events": {
+      "qualified_name": "public.audit_events",
+      "estimated_row_count": 250000,
+      "total_size_bytes": 67108864,
+      "has_triggers": false,
+      "has_foreign_key_refs": false
+    }
+  }
+}

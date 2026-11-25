@@ -1,0 +1,16 @@
+# MigrationX CODEOWNERS
+# Enforces two-person Split C ownership and cross-review on shared contracts.
+# Replace @core-engineer and @product-engineer with your GitHub handles/teams.
+
+# Shared Boundary — BOTH engineers must approve any change
+/crates/contracts/         @core-engineer @product-engineer
+
+# Core Engineering Ownership
+/crates/static-analyzer/   @core-engineer
+/crates/simulator/         @core-engineer
+/docs/security/            @core-engineer
+
+# Product Engineering & Validation Ownership
+/crates/cli/               @product-engineer
+/tests/                    @product-engineer
+/.github/                  @product-engineer

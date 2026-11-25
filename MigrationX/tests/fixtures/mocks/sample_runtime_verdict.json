@@ -1,0 +1,27 @@
+{
+  "schema_version": "0.1.0",
+  "migration_succeeded": false,
+  "duration_ms": 8420,
+  "lock_observations": [
+    {
+      "mode": "ACCESS_EXCLUSIVE",
+      "relation": "public.users",
+      "held_ms": 6150,
+      "blocked_concurrent_queries": true
+    },
+    {
+      "mode": "SHARE_UPDATE_EXCLUSIVE",
+      "relation": "public.audit_events",
+      "held_ms": 180,
+      "blocked_concurrent_queries": false
+    }
+  ],
+  "broken_queries": [
+    {
+      "sql": "PREPARE n_minus_1_user_fetch AS SELECT id, legacy_status FROM public.users WHERE id = $1;",
+      "error_message": "column \"legacy_status\" does not exist",
+      "sqlstate": "42703"
+    }
+  ],
+  "overall_status": "OBSERVED_IN_SIMULATION"
+}

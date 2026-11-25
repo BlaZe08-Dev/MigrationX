@@ -1,0 +1,38 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/contracts",
+    "crates/static-analyzer",
+    "crates/simulator",
+    "crates/cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+
+
+[workspace.dependencies]
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# PostgreSQL
+tokio-postgres = "0.7"
+pg_query = "18"
+
+# Testing
+testcontainers = "0.28"
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Observability
+tracing = "0.1"
+
+# Error handling
+thiserror = "2"
+anyhow = "1"
