@@ -37,9 +37,7 @@ The project is being built around one rule: **unverified does not mean safe**. S
 
 The intended end-to-end flow combines two independent evidence paths: static SQL analysis and runtime simulation. Both produce typed contracts so the final report can preserve what was detected, observed, passed or left unverified.
 
-<p align="center">
-  <img src="assets/readme/migrationx-pipeline.svg" alt="MigrationX system flow from migration SQL and database metadata through static analysis and disposable PostgreSQL simulation to a typed verdict" width="100%"/>
-</p>
+
 
 ### Crate boundaries
 
