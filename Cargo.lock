@@ -1425,6 +1425,7 @@ name = "migrationx-simulator"
 version = "0.1.0"
 dependencies = [
  "migrationx-contracts",
+ "migrationx-static-analyzer",
  "serde",
  "serde_json",
  "testcontainers",
