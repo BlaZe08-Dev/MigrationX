@@ -5,7 +5,6 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::time::{Duration, Instant};
 
-use testcontainers::core::wait::LogWaitStrategy;
 use testcontainers::core::{ContainerAsync, ContainerRequest, Mount, WaitFor};
 use testcontainers::runners::AsyncRunner;
 use testcontainers::{GenericImage, ImageExt};
@@ -68,7 +67,7 @@ impl Default for RunnerConfig {
             memory_bytes_limit: DEFAULT_MEMORY_BYTES_LIMIT,
             tmpfs_bytes_limit: DEFAULT_TMPFS_BYTES_LIMIT,
             disable_outbound_network: true,
-            boot_timeout: Duration::from_secs(30),
+            boot_timeout: Duration::from_secs(60),
             query_timeout: Duration::from_secs(30),
             cleanup_timeout: Duration::from_secs(10),
         }
@@ -151,9 +150,7 @@ pub fn build_postgres_container_request(
     let disable_net = config.disable_outbound_network;
 
     let mut req = GenericImage::new(POSTGRES_IMAGE_NAME, POSTGRES_IMAGE_TAG)
-        .with_wait_for(WaitFor::Log(
-            LogWaitStrategy::stderr("database system is ready to accept connections").with_times(2),
-        ))
+        .with_wait_for(WaitFor::Nothing)
         .with_env_var("POSTGRES_USER", SIM_DB_USER)
         .with_env_var("POSTGRES_PASSWORD", SIM_DB_PASSWORD)
         .with_env_var("POSTGRES_DB", SIM_DB_NAME)
@@ -230,7 +227,7 @@ impl PostgresRunner {
 
         let socket_file = socket_dir_path.join(".s.PGSQL.5432");
         let (client, connection_task) =
-            connect_unix_socket(&socket_file, config.boot_timeout).await?;
+            wait_and_connect_unix_socket(&socket_file, config.boot_timeout).await?;
 
         let boot_latency = boot_start.elapsed();
         info!(
@@ -351,6 +348,40 @@ impl Drop for PostgresRunner {
     }
 }
 
+/// Polls the PostgreSQL Unix domain socket until it accepts a connection or
+/// `timeout` elapses.
+///
+/// Handles the brief window after `docker-entrypoint.sh` `initdb` where the
+/// socket file may not yet be created or listening.
+async fn wait_and_connect_unix_socket(
+    socket_path: &Path,
+    timeout: Duration,
+) -> Result<(Client, JoinHandle<()>), SimulatorError> {
+    let poll_fut = async {
+        loop {
+            match connect_unix_socket(socket_path, timeout).await {
+                Ok((client, handle)) => match client.simple_query("SELECT 1").await {
+                    Ok(_) => return Ok((client, handle)),
+                    Err(_) => {
+                        handle.abort();
+                        tokio::time::sleep(Duration::from_millis(50)).await;
+                    }
+                },
+                Err(SimulatorError::ConnectionFailed { .. }) => {
+                    tokio::time::sleep(Duration::from_millis(50)).await;
+                }
+                Err(other) => return Err(other),
+            }
+        }
+    };
+
+    tokio::time::timeout(timeout, poll_fut).await.map_err(|_| {
+        SimulatorError::ContainerBootTimeout {
+            timeout_secs: timeout.as_secs(),
+        }
+    })?
+}
+
 /// Connects to PostgreSQL over a Unix domain socket with an explicit timeout.
 ///
 /// # Cancellation Safety
@@ -409,6 +440,7 @@ mod tests {
         assert_eq!(cfg.memory_bytes_limit, 512 * 1024 * 1024);
         assert_eq!(cfg.tmpfs_bytes_limit, 1024 * 1024 * 1024);
         assert!(cfg.disable_outbound_network);
+        assert_eq!(cfg.boot_timeout, Duration::from_secs(60));
         assert_eq!(POSTGRES_IMAGE_NAME, "postgres");
         assert_eq!(POSTGRES_IMAGE_TAG, "16.4-bookworm");
     }
