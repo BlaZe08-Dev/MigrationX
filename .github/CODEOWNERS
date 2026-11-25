@@ -1,0 +1,16 @@
+# MigrationX CODEOWNERS
+# Enforces two-person Split C ownership and cross-review on shared contracts.
+# Replace @BlaZe08-Dev and @srijadasbaisnabofficial01-ux with your GitHub handles/teams.
+
+# Shared Boundary — BOTH engineers must approve any change
+/crates/contracts/         @BlaZe08-Dev @srijadasbaisnabofficial01-ux
+
+# Core Engineering Ownership
+/crates/static-analyzer/   @BlaZe08-Dev
+/crates/simulator/         @BlaZe08-Dev
+/docs/security/            @BlaZe08-Dev
+
+# Product Engineering & Validation Ownership
+/crates/cli/               @srijadasbaisnabofficial01-ux
+/tests/                    @srijadasbaisnabofficial01-ux
+/.github/                  @srijadasbaisnabofficial01-ux
