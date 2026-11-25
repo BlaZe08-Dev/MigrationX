@@ -284,22 +284,6 @@ impl PostgresRunner {
         connect_unix_socket(&socket_file, self.config.boot_timeout).await
     }
 
-    /// Opens a new independent `tokio-postgres` connection to the running
-    /// simulation container over its bind-mounted Unix domain socket.
-    ///
-    /// Callers are responsible for aborting or awaiting the returned
-    /// `JoinHandle` when finished.
-    pub async fn connect(&self) -> Result<(Client, JoinHandle<()>), SimulatorError> {
-        let socket_dir = self
-            .socket_dir
-            .as_ref()
-            .ok_or_else(|| SimulatorError::ConnectionFailed {
-                message: "simulation container socket directory is not available".to_string(),
-            })?;
-        let socket_file = socket_dir.join(".s.PGSQL.5432");
-        connect_unix_socket(&socket_file, self.config.boot_timeout).await
-    }
-
     /// Returns the Docker container ID if the container is still active.
     pub fn container_id(&self) -> Option<&str> {
         self.container.as_ref().map(|c| c.id())
